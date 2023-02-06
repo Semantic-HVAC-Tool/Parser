@@ -72,7 +72,7 @@ namespace RevitToRDFConverter
             foreach (SpatialElement space in roomCollector)
             {
                 SpatialElement w = space as SpatialElement;
-                if (space.Category.Name == "Spaces")
+                if (space.Category.Name == "Spaces" & space.LookupParameter("Area").AsDouble() > 0)
                 {
                     string spaceName = space.Name.Replace(' ', '-');
                     string spaceGuid = space.UniqueId.ToString();
@@ -107,36 +107,21 @@ namespace RevitToRDFConverter
                         $"inst:{designHeatingLoadID} fpo:hasUnit 'Watts'^^xsd:string ." + "\n" +
 
                         $"#Supply Air Flow Demand in {spaceName}" + "\n" +
-                        $"inst:{spaceGuid} ex:hasDesignSupplyAirflowDemand inst:{designSupplyAirflowID} ." + "\n" +
-                        $"inst:{designSupplyAirflowID} a ex:DesignSupplyAirflowDemand ." + "\n" +
+                        $"inst:{spaceGuid} ice:hasDesignSupplyAirflowDemand inst:{designSupplyAirflowID} ." + "\n" +
+                        $"inst:{designSupplyAirflowID} a ice:DesignSupplyAirflowDemand ." + "\n" +
                         $"inst:{designSupplyAirflowID} fpo:hasValue '{designSupplyAirflow}'^^xsd:double ." + "\n" +
                         $"inst:{designSupplyAirflowID} fpo:hasUnit 'Liters Per Second'^^xsd:string ." + "\n" +
 
                         $"#Return Air Flow Demand in {spaceName}" + "\n" +
-                        $"inst:{spaceGuid} ex:hasDesignReturnAirflowDemand inst:{designReturnAirflowID} ." + "\n" +
-                        $"inst:{designReturnAirflowID} a ex:DesignReturnAirflowDemand ." + "\n" +
+                        $"inst:{spaceGuid} ice:hasDesignReturnAirflowDemand inst:{designReturnAirflowID} ." + "\n" +
+                        $"inst:{designReturnAirflowID} a ice:DesignReturnAirflowDemand ." + "\n" +
                         $"inst:{designReturnAirflowID} fpo:hasValue '{designReturnAirflow}'^^xsd:double ." + "\n" +
                         $"inst:{designReturnAirflowID} fpo:hasUnit 'Liters Per Second'^^xsd:string ." + "\n"
 );
                 };
             }
 
-            //************************* NOT NEEDED
-
-            ////Get all rooms and assign the level to it. ROOMS NOT NECESSARY USING SPACES INSTEAD
-            //FilteredElementCollector rooms = new FilteredElementCollector(doc);
-            //RoomFilter filter = new RoomFilter();
-            //rooms.WherePasses(filter);
-            //foreach (Room room in rooms)
-            //{
-            //    Room w = room as Room;
-            //    string roomName = room.Name.Replace(' ', '-');
-            //    string isSpaceOf = room.Level.UniqueId;
-            //    string roomGuid = room.UniqueId.ToString();
-            //    sb.Append($"inst:{roomGuid} a bot:Space ." + "\n" + $"inst:{roomGuid} rdfs:label '{roomName}'^^xsd:string ." + "\n" + $"inst:{isSpaceOf} bot:hasSpace inst:{roomGuid} ." + "\n");
-            //}
-
-            //*****************
+           
             //Relationship between ventilation systems and their components. WORKING
             FilteredElementCollector ventilationSystemCollector = new FilteredElementCollector(doc);
             ICollection<Element> ventilationSystems = ventilationSystemCollector.OfClass(typeof(MechanicalSystem)).ToElements();
@@ -228,8 +213,6 @@ namespace RevitToRDFConverter
                 string systemID = system.UniqueId;
                 string systemName = system.Name;
                 ElementId superSystemType = system.GetTypeId();
-                //    string superSystemName = doc.GetElement(superSystemType).LookupParameter("Family Name").AsValueString();
-                //    string superSystemID = doc.GetElement(superSystemType).UniqueId;
 
                 //Fluid
                 string fluidID = System.Guid.NewGuid().ToString().Replace(' ', '-');
@@ -709,29 +692,10 @@ namespace RevitToRDFConverter
                             //     + $"inst:{flowID} fpo:hasUnit 'Liters per second'^^xsd:string ." + "\n");
                             //}
 
-                        
-
-                            //{ SLETTES
-                            //    ////Pressure Drop
-                            //    //string pressureDropID = System.Guid.NewGuid().ToString().Replace(' ', '-');
-                            //    ////double pressureDropValue = UnitUtils.ConvertFromInternalUnits(component.LookupParameter("Pressure loss").AsDouble(), UnitTypeId.Pascals); VIRKER IKKE PÅ FREDERIKSBERG
-                            //    //double pressureDropValue = 0; //Midlertidig på Frederiksberg skole
-
-                            //    //sb.Append($"inst:{componentID} fpo:pressureDrop inst:{pressureDropID} ." + "\n"
-                            //    // + $"inst:{pressureDropID} a fpo:PressureDrop ." + "\n"
-                            //    // + $"inst:{pressureDropID} fpo:hasValue '{pressureDropValue}'^^xsd:double ." + "\n"
-                            //    // + $"inst:{pressureDropID} fpo:hasUnit 'Pascal'^^xsd:string ." + "\n");
-
-                            //}
+                       
                         }
 
-                        ////FlowRate  SLETTES
-                        //string flowrateID = System.Guid.NewGuid().ToString().Replace(' ', '-');
-                        //double flowrateValue = UnitUtils.ConvertFromInternalUnits(component.LookupParameter("Flow").AsDouble(), UnitTypeId.LitersPerSecond);
-                        //sb.Append($"inst:{componentID} fpo:flowRate inst:{flowrateID} ." + "\n"
-                        // + $"inst:{flowrateID} a fpo:FlowRate ." + "\n"
-                        // + $"inst:{flowrateID} fpo:hasValue  '{flowrateValue}'^^xsd:double ." + "\n"
-                        // + $"inst:{flowrateID} fpo:hasUnit  'm3/h'^^xsd:string ." + "\n");
+
 
                     }
 
@@ -821,31 +785,7 @@ namespace RevitToRDFConverter
                      + $"inst:{lengthID} fpo:hasValue '{lengthValue}'^^xsd:double ." + "\n"
                      + $"inst:{lengthID} fpo:hasUnit 'Meter'^^xsd:string ." + "\n");
                 }
-                //if (component.LookupParameter("Outside Diameter") != null)
-                //{
-                //    //Outside diameter
-                //    string outsideDiameterID = System.Guid.NewGuid().ToString().Replace(' ', '-');
-                //    double outsideDiameterValue = UnitUtils.ConvertFromInternalUnits(component.LookupParameter("Outside Diameter").AsDouble(), UnitTypeId.Meters);
-                //    sb.Append($"inst:{componentID} fpo:hydraulicDiameter inst:{outsideDiameterID} ." + "\n"
-                //     + $"inst:{outsideDiameterID} a fpo:HydraulicDiameter ." + "\n"
-                //     + $"inst:{outsideDiameterID} fpo:hasValue '{outsideDiameterValue}'^^xsd:double ." + "\n"
-                //     + $"inst:{outsideDiameterID} fpo:hasUnit 'Meter'^^xsd:string ." + "\n");
-                //}
-                ////Inside diameter
-                //string insideDiameterID = System.Guid.NewGuid().ToString().Replace(' ', '-');
-                //double insideDiameterValue = UnitUtils.ConvertFromInternalUnits(component.LookupParameter("Inside Diameter").AsDouble(), UnitTypeId.Meters);
-                //sb.Append($"inst:{componentID} fpo:insideDiameter inst:{insideDiameterID} ." + "\n"
-                // + $"inst:{insideDiameterID} a fpo:InsideDiameter ." + "\n"
-                // + $"inst:{insideDiameterID} fpo:hasValue '{insideDiameterValue}'^^xsd:double ." + "\n"
-                // + $"inst:{insideDiameterID} fpo:hasUnit 'meter'^^xsd:string ." + "\n");
 
-                ////Wallthickness
-                //string wallThicknessID = System.Guid.NewGuid().ToString().Replace(' ', '-');
-                //double wallThicknessValue = outsideDiameterValue - insideDiameterValue;
-                //sb.Append($"inst:{componentID} fpo:wallThickness inst:{wallThicknessID} ." + "\n"
-                // + $"inst:{wallThicknessID} a fpo:WallThickness ." + "\n"
-                // + $"inst:{wallThicknessID} fpo:hasValue '{wallThicknessValue}'^^xsd:double ." + "\n"
-                // + $"inst:{wallThicknessID} fpo:hasUnit 'meter'^^xsd:string ." + "\n");
 
                 //MaterialType
                 string materialTypeID = System.Guid.NewGuid().ToString().Replace(' ', '-');

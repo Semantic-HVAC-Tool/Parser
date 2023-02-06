@@ -109,42 +109,24 @@ namespace RevitToRDFConverter
 
                     }
 
-                    if (connector.Flow != null)
-                    {
-                        //Flow rate
-                        string flowID = System.Guid.NewGuid().ToString().Replace(' ', '-');
-                        double flowValue = UnitUtils.ConvertFromInternalUnits(connector.Flow, UnitTypeId.LitersPerSecond);
-                        sb.Append($"inst:{connectorID} fpo:hasFlowRate inst:{flowID} ." + "\n"
-                         + $"inst:{flowID} a fpo:FlowRate ." + "\n"
-                         + $"inst:{flowID} fpo:hasValue '{flowValue}'^^xsd:double ." + "\n"
-                         + $"inst:{flowID} fpo:hasUnit 'Liters per second'^^xsd:string ." + "\n");
-                    }
-
-                    //if (connector.VelocityPressure != null)
+                    //if (connector.Flow != null)
                     //{
                     //    //Flow rate
-                    //    string velocityID = System.Guid.NewGuid().ToString().Replace(' ', '-');
-                    //    double velocityValue = UnitUtils.ConvertFromInternalUnits(connector.VelocityPressure, UnitTypeId.MetersPerSecond);
-                    //    sb.Append($"inst:{connectorID} fpo:velocity inst:{velocityID} ." + "\n"
-                    //     + $"inst:{velocityID} a fpo:Velocity ." + "\n"
-                    //     + $"inst:{velocityID} fpo:hasValue '{velocityValue}'^^xsd:double ." + "\n"
-                    //     + $"inst:{velocityID} fpo:hasUnit 'Meters per second'^^xsd:string ." + "\n");
+                    //    string flowID = System.Guid.NewGuid().ToString().Replace(' ', '-');
+                    //    double flowValue = UnitUtils.ConvertFromInternalUnits(connector.Flow, UnitTypeId.LitersPerSecond);
+                    //    sb.Append($"inst:{connectorID} fpo:hasFlowRate inst:{flowID} ." + "\n"
+                    //     + $"inst:{flowID} a fpo:FlowRate ." + "\n"
+                    //     + $"inst:{flowID} fpo:hasValue '{flowValue}'^^xsd:double ." + "\n"
+                    //     + $"inst:{flowID} fpo:hasUnit 'Liters per second'^^xsd:string ." + "\n");
                     //}
+
+
 
                         //Port relationship to other ports
                         ConnectorSet joinedconnectors = connector.AllRefs;
                     if (connectorDirection == "Out")
                     {
-                        //if (component.LookupParameter("Flow") != null)
-                        //{
-                        //    //Flow rate
-                        //    string flowID = System.Guid.NewGuid().ToString().Replace(' ', '-');
-                        //    double flowValue = UnitUtils.ConvertFromInternalUnits(component.LookupParameter("Flow").AsDouble(), UnitTypeId.LitersPerSecond);
-                        //    sb.Append($"inst:{connectorID} fpo:hasFlowRate inst:{flowID} ." + "\n"
-                        //     + $"inst:{flowID} a fpo:FlowRate ." + "\n"
-                        //     + $"inst:{flowID} fpo:hasValue '{flowValue}'^^xsd:double ." + "\n"
-                        //     + $"inst:{flowID} fpo:hasUnit 'Liters per second'^^xsd:string ." + "\n");
-                        //}
+                       
 
                         if (component.LookupParameter("FSC_nomPressureDrop") != null)
                         {
@@ -157,16 +139,7 @@ namespace RevitToRDFConverter
                            + $"inst:{pressureDropID} fpo:hasUnit 'Pascal'^^xsd:string ." + "\n");
                         }
 
-                        //if (component.LookupParameter("FSC_flow") != null)
-                        //{
-                        //    //FlowRate
-                        //    string flowrateID = System.Guid.NewGuid().ToString().Replace(' ', '-');
-                        //    double flowrateValue = UnitUtils.ConvertFromInternalUnits(component.LookupParameter("FSC_flow").AsDouble(), UnitTypeId.LitersPerSecond);
-                        //    sb.Append($"inst:{connectorID} fpo:hasFlowRate inst:{flowrateID} ." + "\n"
-                        //     + $"inst:{flowrateID} a fpo:FlowRate ." + "\n"
-                        //     + $"inst:{flowrateID} fpo:hasValue  '{flowrateValue}'^^xsd:double ." + "\n"
-                        //     + $"inst:{flowrateID} fpo:hasUnit  'm3/h'^^xsd:string ." + "\n");
-                        //}
+                        
                         if (component.LookupParameter("Reynolds Number") != null)
                         {
                             //Reynolds number
@@ -185,40 +158,6 @@ namespace RevitToRDFConverter
                              + $"inst:{frictionFactorID} a fpo:FrictionFactor ." + "\n"
                              + $"inst:{frictionFactorID} fpo:hasValue '{frictionFactorValue}'^^xsd:double ." + "\n");
                         }
-
-                        //if (component.LookupParameter("Velocity") != null)
-                        //{
-                        //    //Flow Velocity
-                        //    string velocityID = System.Guid.NewGuid().ToString().Replace(' ', '-');
-                        //    double velocityValue = UnitUtils.ConvertFromInternalUnits(component.LookupParameter("Velocity").AsDouble(), UnitTypeId.MetersPerSecond);
-                        //    sb.Append($"inst:{connectorID} fpo:velocity inst:{velocityID} ." + "\n"
-                        //     + $"inst:{velocityID} a fpo:Velocity ." + "\n"
-                        //     + $"inst:{velocityID} fpo:hasValue '{velocityValue}'^^xsd:double ." + "\n"
-                        //     + $"inst:{velocityID} fpo:hasUnit 'Meters per second'^^xsd:string ." + "\n");
-                        //}
-
-                        //if (component.LookupParameter("Pressure Drop") != null)
-                        //{
-                        //    //Pressure Drop
-                        //    string pressureDropID = System.Guid.NewGuid().ToString().Replace(' ', '-');
-                        //    double pressureDropValue = UnitUtils.ConvertFromInternalUnits(component.LookupParameter("Pressure Drop").AsDouble(), UnitTypeId.Pascals);
-                        //    sb.Append($"inst:{connectorID} fpo:hasPressureDrop inst:{pressureDropID} ." + "\n"
-                        //     + $"inst:{pressureDropID} a fpo:PressureDrop ." + "\n"
-                        //     + $"inst:{pressureDropID} fpo:hasValue '{pressureDropValue}'^^xsd:double ." + "\n"
-                        //     + $"inst:{pressureDropID} fpo:hasUnit 'Pascal'^^xsd:string ." + "\n");
-                        //};
-
-                        //if (component.LookupParameter("Pressure loss") != null)
-                        //{
-                        //    //Pressure Drop
-                        //    string pressureDropID = System.Guid.NewGuid().ToString().Replace(' ', '-');
-                        //    double pressureDropValue = UnitUtils.ConvertFromInternalUnits(component.LookupParameter("Pressure loss").AsDouble(), UnitTypeId.Pascals);
-                        //    sb.Append($"inst:{connectorID} fpo:hasPressureDrop inst:{pressureDropID} ." + "\n"
-                        //     + $"inst:{pressureDropID} a fpo:PressureDrop ." + "\n"
-                        //     + $"inst:{pressureDropID} fpo:hasValue '{pressureDropValue}'^^xsd:double ." + "\n"
-                        //     + $"inst:{pressureDropID} fpo:hasUnit 'Pascal'^^xsd:string ." + "\n");
-                        //};
-
 
 
                         if (component.LookupParameter("Flow State") != null)
@@ -330,15 +269,15 @@ namespace RevitToRDFConverter
 
                     if (connectorDirection == "Out" && Domain.DomainHvac == connector.Domain)
                     { 
-                        if(component.LookupParameter("FSC_nomFlow1") != null) { 
-                            //Air side flow
-                            string flowID = System.Guid.NewGuid().ToString().Replace(' ', '-'); ;
-                            double flowValue = UnitUtils.ConvertFromInternalUnits(component.LookupParameter("FSC_nomFlow1").AsDouble(), UnitTypeId.LitersPerSecond);
-                            sb.Append($"inst:{connectorID} fpo:hasFlowRate inst:{flowID} ." + "\n"
-                         + $"inst:{flowID} a fpo:FlowRate ." + "\n"
-                         + $"inst:{flowID} fpo:hasValue '{flowValue}'^^xsd:double ." + "\n"
-                         + $"inst:{flowID} fpo:hasUnit 'Liters per second'^^xsd:string ." + "\n");
-                        }
+                        //if(component.LookupParameter("FSC_nomFlow1") != null) { 
+                        //    //Air side flow
+                        //    string flowID = System.Guid.NewGuid().ToString().Replace(' ', '-'); ;
+                        //    double flowValue = UnitUtils.ConvertFromInternalUnits(component.LookupParameter("FSC_nomFlow1").AsDouble(), UnitTypeId.LitersPerSecond);
+                        //    sb.Append($"inst:{connectorID} fpo:hasFlowRate inst:{flowID} ." + "\n"
+                        // + $"inst:{flowID} a fpo:FlowRate ." + "\n"
+                        // + $"inst:{flowID} fpo:hasValue '{flowValue}'^^xsd:double ." + "\n"
+                        // + $"inst:{flowID} fpo:hasUnit 'Liters per second'^^xsd:string ." + "\n");
+                        //}
 
                         if (component.LookupParameter("FSC_nomPressureDrop1") != null)
                         {
@@ -354,15 +293,15 @@ namespace RevitToRDFConverter
 
                     if (connectorDirection == "Out" && Domain.DomainPiping == connector.Domain)
                     {
-                        if(component.LookupParameter("FSC_nomFlow2") != null) { 
-                            //Water side flow
-                            string flowID = System.Guid.NewGuid().ToString().Replace(' ', '-'); ;
-                            double flowValue = UnitUtils.ConvertFromInternalUnits(component.LookupParameter("FSC_nomFlow2").AsDouble(), UnitTypeId.LitersPerSecond);
-                            sb.Append($"inst:{connectorID} fpo:hasFlowRate inst:{flowID} ." + "\n"
-                          + $"inst:{flowID} a fpo:FlowRate ." + "\n"
-                          + $"inst:{flowID} fpo:hasValue '{flowValue}'^^xsd:double ." + "\n"
-                          + $"inst:{flowID} fpo:hasUnit 'Liters per second'^^xsd:string ." + "\n");
-                        }
+                        //if(component.LookupParameter("FSC_nomFlow2") != null) { 
+                        //    //Water side flow
+                        //    string flowID = System.Guid.NewGuid().ToString().Replace(' ', '-'); ;
+                        //    double flowValue = UnitUtils.ConvertFromInternalUnits(component.LookupParameter("FSC_nomFlow2").AsDouble(), UnitTypeId.LitersPerSecond);
+                        //    sb.Append($"inst:{connectorID} fpo:hasFlowRate inst:{flowID} ." + "\n"
+                        //  + $"inst:{flowID} a fpo:FlowRate ." + "\n"
+                        //  + $"inst:{flowID} fpo:hasValue '{flowValue}'^^xsd:double ." + "\n"
+                        //  + $"inst:{flowID} fpo:hasUnit 'Liters per second'^^xsd:string ." + "\n");
+                        //}
                         if (component.LookupParameter("FSC_nomPressureDrop2") != null)
                         {
                             //Water side pressure drop
@@ -477,43 +416,23 @@ namespace RevitToRDFConverter
                         $"inst:{crossSectionalAreaID} fpo:hasValue '{crossSectionalArea}'^^xsd:double ." + "\n" +
                         $"inst:{crossSectionalAreaID} fpo:hasUnit 'Meter'^^xsd:string  ." + "\n");
 
-                    if (connector.Flow != null)
-                    {
-                        //Flow rate
-                        string flowID = System.Guid.NewGuid().ToString().Replace(' ', '-');
-                        double flowValue = UnitUtils.ConvertFromInternalUnits(connector.Flow, UnitTypeId.LitersPerSecond);
-                        sb.Append($"inst:{connectorID} fpo:hasFlowRate inst:{flowID} ." + "\n"
-                         + $"inst:{flowID} a fpo:FlowRate ." + "\n"
-                         + $"inst:{flowID} fpo:hasValue '{flowValue}'^^xsd:double ." + "\n"
-                         + $"inst:{flowID} fpo:hasUnit 'Liters per second'^^xsd:string ." + "\n");
-                    }
-
-                    //if (connector.VelocityPressure != null)
+                    //if (connector.Flow != null)
                     //{
                     //    //Flow rate
-                    //    string velocityID = System.Guid.NewGuid().ToString().Replace(' ', '-');
-                    //    double velocityValue = UnitUtils.ConvertFromInternalUnits(connector.VelocityPressure, UnitTypeId.MetersPerSecond);
-                    //    sb.Append($"inst:{connectorID} fpo:velocity inst:{velocityID} ." + "\n"
-                    //     + $"inst:{velocityID} a fpo:Velocity ." + "\n"
-                    //     + $"inst:{velocityID} fpo:hasValue '{velocityValue}'^^xsd:double ." + "\n"
-                    //     + $"inst:{velocityID} fpo:hasUnit 'Meters per second'^^xsd:string ." + "\n");
+                    //    string flowID = System.Guid.NewGuid().ToString().Replace(' ', '-');
+                    //    double flowValue = UnitUtils.ConvertFromInternalUnits(connector.Flow, UnitTypeId.LitersPerSecond);
+                    //    sb.Append($"inst:{connectorID} fpo:hasFlowRate inst:{flowID} ." + "\n"
+                    //     + $"inst:{flowID} a fpo:FlowRate ." + "\n"
+                    //     + $"inst:{flowID} fpo:hasValue '{flowValue}'^^xsd:double ." + "\n"
+                    //     + $"inst:{flowID} fpo:hasUnit 'Liters per second'^^xsd:string ." + "\n");
                     //}
+
 
                     //Port relationship to other ports
                     ConnectorSet joinedconnectors = connector.AllRefs;
                     if (connectorDirection == "Out")
                     {
 
-                        //if (component.LookupParameter("Flow") != null)
-                        //{
-                        //    //Flow rate
-                        //    string flowID = System.Guid.NewGuid().ToString().Replace(' ', '-');
-                        //    double flowValue = UnitUtils.ConvertFromInternalUnits(component.LookupParameter("Flow").AsDouble(), UnitTypeId.LitersPerSecond);
-                        //    sb.Append($"inst:{connectorID} fpo:hasFlowRate inst:{flowID} ." + "\n"
-                        //     + $"inst:{flowID} a fpo:FlowRate ." + "\n"
-                        //     + $"inst:{flowID} fpo:hasValue '{flowValue}'^^xsd:double ." + "\n"
-                        //     + $"inst:{flowID} fpo:hasUnit 'Liters per second'^^xsd:string ." + "\n");
-                        //}
 
                         if (component.LookupParameter("Reynolds Number") != null)
                         {
@@ -534,34 +453,7 @@ namespace RevitToRDFConverter
                              + $"inst:{frictionFactorID} fpo:hasValue '{frictionFactorValue}'^^xsd:double ." + "\n");
                         }
 
-                        //if (component.LookupParameter("Velocity") != null)
-                        //{
-                        //    //Flow Velocity
-                        //    string velocityID = System.Guid.NewGuid().ToString().Replace(' ', '-');
-                        //    double velocityValue = UnitUtils.ConvertFromInternalUnits(component.LookupParameter("Velocity").AsDouble(), UnitTypeId.MetersPerSecond);
-                        //    sb.Append($"inst:{connectorID} fpo:velocity inst:{velocityID} ." + "\n"
-                        //     + $"inst:{velocityID} a fpo:Velocity ." + "\n"
-                        //     + $"inst:{velocityID} fpo:hasValue '{velocityValue}'^^xsd:double ." + "\n"
-                        //     + $"inst:{velocityID} fpo:hasUnit 'Meters per second'^^xsd:string ." + "\n");
-                        //}
-
-                        //if (component.LookupParameter("Pressure Drop") != null)
-                        //{
-                        //    //Pressure Drop
-                        //    string pressureDropID = System.Guid.NewGuid().ToString().Replace(' ', '-');
-                        //    double pressureDropValue = UnitUtils.ConvertFromInternalUnits(component.LookupParameter("Pressure Drop").AsDouble(), UnitTypeId.Pascals);
-
-                        //    if (component.LookupParameter("Velocity Pressure") != null)
-                        //    {
-                        //        double VelocityPressureDropValue = UnitUtils.ConvertFromInternalUnits(component.LookupParameter("Velocity Pressure").AsDouble(), UnitTypeId.Pascals);
-                        //        pressureDropValue += VelocityPressureDropValue;
-                        //    }
-
-                        //    sb.Append($"inst:{connectorID} fpo:hasPressureDrop inst:{pressureDropID} ." + "\n"
-                        //     + $"inst:{pressureDropID} a fpo:PressureDrop ." + "\n"
-                        //     + $"inst:{pressureDropID} fpo:hasValue '{pressureDropValue}'^^xsd:double ." + "\n"
-                        //     + $"inst:{pressureDropID} fpo:hasUnit 'Pascal'^^xsd:string ." + "\n");
-                        //};
+                       
 
                         if (component.LookupParameter("Flow State") != null)
                         {
@@ -705,43 +597,24 @@ namespace RevitToRDFConverter
 
                     }
 
-                    if (connector.Flow != null)
-                    {
-                        //Flow rate
-                        string flowID = System.Guid.NewGuid().ToString().Replace(' ', '-');
-                        double flowValue = UnitUtils.ConvertFromInternalUnits(connector.Flow, UnitTypeId.LitersPerSecond);
-                        sb.Append($"inst:{connectorID} fpo:hasFlowRate inst:{flowID} ." + "\n"
-                         + $"inst:{flowID} a fpo:FlowRate ." + "\n"
-                         + $"inst:{flowID} fpo:hasValue '{flowValue}'^^xsd:double ." + "\n"
-                         + $"inst:{flowID} fpo:hasUnit 'Liters per second'^^xsd:string ." + "\n");
-                    }
-
-                    //if (connector.VelocityPressure != null)
+                    //if (connector.Flow != null)
                     //{
                     //    //Flow rate
-                    //    string velocityID = System.Guid.NewGuid().ToString().Replace(' ', '-');
-                    //    double velocityValue = UnitUtils.ConvertFromInternalUnits(connector.VelocityPressure, UnitTypeId.MetersPerSecond);
-                    //    sb.Append($"inst:{connectorID} fpo:velocity inst:{velocityID} ." + "\n"
-                    //     + $"inst:{velocityID} a fpo:Velocity ." + "\n"
-                    //     + $"inst:{velocityID} fpo:hasValue '{velocityValue}'^^xsd:double ." + "\n"
-                    //     + $"inst:{velocityID} fpo:hasUnit 'Meters per second'^^xsd:string ." + "\n");
+                    //    string flowID = System.Guid.NewGuid().ToString().Replace(' ', '-');
+                    //    double flowValue = UnitUtils.ConvertFromInternalUnits(connector.Flow, UnitTypeId.LitersPerSecond);
+                    //    sb.Append($"inst:{connectorID} fpo:hasFlowRate inst:{flowID} ." + "\n"
+                    //     + $"inst:{flowID} a fpo:FlowRate ." + "\n"
+                    //     + $"inst:{flowID} fpo:hasValue '{flowValue}'^^xsd:double ." + "\n"
+                    //     + $"inst:{flowID} fpo:hasUnit 'Liters per second'^^xsd:string ." + "\n");
                     //}
+
+
 
                     //Port relationship to other ports
                     ConnectorSet joinedconnectors = connector.AllRefs;
                     if (connectorDirection == "Out")
                     {
 
-                        //if (component.LookupParameter("Flow") != null)
-                        //{
-                        //    //Flow rate
-                        //    string flowID = System.Guid.NewGuid().ToString().Replace(' ', '-');
-                        //    double flowValue = UnitUtils.ConvertFromInternalUnits(component.LookupParameter("Flow").AsDouble(), UnitTypeId.LitersPerSecond);
-                        //    sb.Append($"inst:{connectorID} fpo:hasFlowRate inst:{flowID} ." + "\n"
-                        //     + $"inst:{flowID} a fpo:FlowRate ." + "\n"
-                        //     + $"inst:{flowID} fpo:hasValue '{flowValue}'^^xsd:double ." + "\n"
-                        //     + $"inst:{flowID} fpo:hasUnit 'Liters per second'^^xsd:string ." + "\n");
-                        //}
 
                         if (component.LookupParameter("Reynolds number") != null)
                         {
@@ -753,30 +626,6 @@ namespace RevitToRDFConverter
                              + $"inst:{reynoldsID} fpo:hasValue '{reynoldsValue}'^^xsd:double ." + "\n");
                         }
 
-
-                        ////Flow Velocity
-                        //string velocityID = System.Guid.NewGuid().ToString().Replace(' ', '-');
-                        //double velocityValue = UnitUtils.ConvertFromInternalUnits(component.LookupParameter("Velocity").AsDouble(), UnitTypeId.MetersPerSecond);
-                        //sb.Append($"inst:{connectorID} fpo:velocity inst:{velocityID} ." + "\n"
-                        // + $"inst:{velocityID} a fpo:Velocity ." + "\n"
-                        // + $"inst:{velocityID} fpo:hasValue '{velocityValue}'^^xsd:double ." + "\n"
-                        // + $"inst:{velocityID} fpo:hasUnit 'Meters per second'^^xsd:string ." + "\n");
-
-                        //if (component.LookupParameter("Pressure Drop") != null)
-                        //{
-                        //    //Pressure Drop
-                        //    string pressureDropID = System.Guid.NewGuid().ToString().Replace(' ', '-');
-                        //    double pressureDropValue = UnitUtils.ConvertFromInternalUnits(component.LookupParameter("Pressure Drop").AsDouble(), UnitTypeId.Pascals);
-                        //    if (component.LookupParameter("Velocity Pressure") != null)
-                        //    {
-                        //        double VelocityPressureDropValue = UnitUtils.ConvertFromInternalUnits(component.LookupParameter("Velocity Pressure").AsDouble(), UnitTypeId.Pascals);
-                        //        pressureDropValue += VelocityPressureDropValue;
-                        //    }
-                        //        sb.Append($"inst:{connectorID} fpo:hasPressureDrop inst:{pressureDropID} ." + "\n"
-                        //     + $"inst:{pressureDropID} a fpo:PressureDrop ." + "\n"
-                        //     + $"inst:{pressureDropID} fpo:hasValue '{pressureDropValue}'^^xsd:double ." + "\n"
-                        //     + $"inst:{pressureDropID} fpo:hasUnit 'Pascal'^^xsd:string ." + "\n");
-                        //};
 
                         if (component.LookupParameter("Flow State") != null)
                         {
